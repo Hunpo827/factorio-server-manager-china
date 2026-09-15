@@ -1,11 +1,12 @@
 [![.github/workflows/test-workflow.yml](https://github.com/OpenFactorioServerManager/factorio-server-manager/workflows/.github/workflows/test-workflow.yml/badge.svg)](https://github.com/OpenFactorioServerManager/factorio-server-manager/actions)
 [![Discord](https://img.shields.io/discord/779512040934342687?label=Discord)](https://discord.gg/SB647WmSbU)
 
-# Factorio 服务器管理器（汉化版）
+# Factorio 服务器管理器 汉化版（factorio-server-manager-china）
 
-> **本仓库是上游项目的分支（fork）**
+> **本仓库是上游项目的分支（fork），面向中文用户维护**
 >
 > 上游仓库：<https://github.com/OpenFactorioServerManager/factorio-server-manager>
+> （原作者信息见文末[鸣谢](#鸣谢)，版权归原作者所有）
 >
 > 本分支在上游 `develop` 的基础上做了以下改动：
 >
@@ -261,17 +262,27 @@ go test ./factorio/        # 单元测试（存档解析、DLC 开关、设置�
 6. 推送分支：`git push origin my-new-feature`
 7. 发起 Pull Request，目标分支选 `develop`
 
-## 作者
+## 维护者
+
+* **[Hunpo827](https://github.com/Hunpo827)** —— 本汉化版（中文界面 + Factorio 2.0 适配）的维护者
+
+## 鸣谢
+
+### 上游项目作者
+
+本项目基于上游开源项目，原作者与主要贡献者如下（**版权归他们所有**）：
 
 * **Mitch Roote** - [roote.ca](https://roote.ca)
 * **[knoxfighter](https://github.com/knoxfighter)**
 * **[Jannaahs](https://github.com/jannaahs)**
 
-## 特别鸣谢
+### 其他
 
 - **[All Contributions](https://github.com/OpenFactorioServerManager/factorio-server-manager/graphs/contributors)**
 - **mickael9** 逆向分析了 Factorio 存档格式：<https://forums.factorio.com/viewtopic.php?f=5&t=8568#>
 
 ## 许可证
 
-本项目采用 MIT 许可证，详见 [LICENSE.md](LICENSE.md)。版权归原作者所有。
+本项目采用 MIT 许可证，详见 [LICENSE.md](LICENSE.md)。
+依据许可证要求，原始的版权声明保留在 `LICENSE.md` 中，**版权归上游原作者所有**；
+本分支仅在其之上进行了汉化与功能改动。
