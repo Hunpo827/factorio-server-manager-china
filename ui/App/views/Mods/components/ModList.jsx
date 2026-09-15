@@ -8,11 +8,11 @@ const ModList = ({mods, factorioVersion, updateMod, toggleMod, deleteMod, addUpd
         <table className="w-full">
             <thead>
             <tr className="text-left py-1">
-                <th>Name</th>
-                <th>Enabled</th>
-                <th>Compatibility</th>
-                <th>Mod Version</th>
-                <th>Factorio Version</th>
+                <th>名称</th>
+                <th>启用</th>
+                <th>兼容性</th>
+                <th>模组版本</th>
+                <th>Factorio 版本</th>
                 <th/>
             </tr>
             </thead>

@@ -23,7 +23,7 @@ const Login = ({handleLogin}) => {
             }
         } catch (e) {
             console.log(e);
-            window.flash("Login failed. Username or Password wrong.", "red");
+            window.flash("登录失败：用户名或密码错误。", "red");
             throw e;
         }
     };
@@ -42,25 +42,25 @@ const Login = ({handleLogin}) => {
     return (
         <div className="h-screen overflow-hidden flex items-center justify-center bg-black">
             <Panel
-                title="Login"
+                title="登录"
                 content={
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-4">
-                            <Label text="Username" htmlFor="username"/>
-                            <Input register={register('username', {required: true})} placeholder="Username"/>
-                            <Error error={errors.username} message="Username is required"/>
+                            <Label text="用户名" htmlFor="username"/>
+                            <Input register={register('username', {required: true})} placeholder="用户名"/>
+                            <Error error={errors.username} message="请填写用户名"/>
                         </div>
                         <div className="mb-6">
-                            <Label text="Password" htmlFor="password"/>
+                            <Label text="密码" htmlFor="password"/>
                             <Input
                                 register={register('password',{required: true})}
                                 type="password"
                                 placeholder="******************"
                             />
-                            <Error error={errors.password} message="Password is required"/>
+                            <Error error={errors.password} message="请填写密码"/>
                         </div>
                         <div className="text-center">
-                            <Button type="success" className="w-full" isSubmit={true}>Sign In</Button>
+                            <Button type="success" className="w-full" isSubmit={true}>登 录</Button>
                         </div>
                     </form>
                 }

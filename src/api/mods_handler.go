@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/OpenFactorioServerManager/factorio-server-manager/bootstrap"
 	"github.com/OpenFactorioServerManager/factorio-server-manager/factorio"
@@ -19,7 +20,7 @@ func CreateNewMods(w http.ResponseWriter) (modList factorio.Mods, resp interface
 	config := bootstrap.GetConfig()
 	modList, err = factorio.NewMods(config.FactorioModsDir)
 	if err != nil {
-		resp = fmt.Sprintf("Error creating mods object: %s", err)
+		resp = fmt.Sprintf("创建模组对象失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -35,7 +36,7 @@ func ReadFromRequestBody(w http.ResponseWriter, r *http.Request, data interface{
 
 	err = json.Unmarshal(body, data)
 	if err != nil {
-		resp = fmt.Sprintf("Error unmarshalling requested struct JSON: %s", err)
+		resp = fmt.Sprintf("解析请求 JSON 失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -88,7 +89,7 @@ func ModToggleHandler(w http.ResponseWriter, r *http.Request) {
 
 	err, resp = mods.ModSimpleList.ToggleMod(data.Name)
 	if err != nil {
-		resp = fmt.Sprintf("Error in toggling mod in simple list: %s", err)
+		resp = fmt.Sprintf("切换模组启用状态失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -123,7 +124,7 @@ func ModDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	err = modList.DeleteMod(data.Name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error in deleting mod {%s}: %s", data.Name, err)
+		resp = fmt.Sprintf("删除模组 {%s} 失败：%s", data.Name, err)
 		log.Println(resp)
 		return
 	}
@@ -144,7 +145,7 @@ func ModDeleteAllHandler(w http.ResponseWriter, r *http.Request) {
 	//delete mods folder
 	err = factorio.DeleteAllMods()
 	if err != nil {
-		resp = fmt.Sprintf("Error deleting all mods: %s", err)
+		resp = fmt.Sprintf("删除全部模组失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -182,7 +183,7 @@ func ModUpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = mods.UpdateMod(modData.Name, modData.DownloadUrl, modData.Filename)
 	if err != nil {
-		resp = fmt.Sprintf("Error updating mod {%s}: %s", modData.Name, err)
+		resp = fmt.Sprintf("更新模组 {%s} 失败：%s", modData.Name, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -195,7 +196,7 @@ func ModUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	resp = fmt.Sprintf(`Could not find mod %s`, modData.Name)
+	resp = fmt.Sprintf(`找不到模组 %s`, modData.Name)
 	log.Println(resp)
 	w.WriteHeader(http.StatusNotFound)
 	return
@@ -213,7 +214,7 @@ func ModUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	formFile, fileHeader, err := r.FormFile("mod_file")
 	if err != nil {
-		resp = fmt.Sprintf("error getting uploaded file: %s", err)
+		resp = fmt.Sprintf("获取上传文件失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -230,7 +231,7 @@ func ModUploadHandler(w http.ResponseWriter, r *http.Request) {
 	if filepath.Ext(fileHeader.Filename) == ".zip" {
 		err = mods.UploadMod(formFile, fileHeader)
 		if err != nil {
-			resp = fmt.Sprintf("error saving file to mods: %s", err)
+			resp = fmt.Sprintf("保存模组文件失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -239,20 +240,20 @@ func ModUploadHandler(w http.ResponseWriter, r *http.Request) {
 		modsDir := filepath.Join(bootstrap.GetConfig().FactorioModsDir, fileHeader.Filename)
 		file, err := os.Create(modsDir)
 		if err != nil {
-			resp = fmt.Sprintf("error creating %s: %s", fileHeader.Filename, err)
+			resp = fmt.Sprintf("创建文件 %s 失败：%s", fileHeader.Filename, err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		_, err = io.Copy(file, formFile)
 		if err != nil {
-			resp = fmt.Sprintf("error saving %s: %s", fileHeader.Filename, err)
+			resp = fmt.Sprintf("保存文件 %s 失败：%s", fileHeader.Filename, err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 	} else {
-		resp = fmt.Sprintf("The uploaded file wasn't a zip-file, a mod-settings. dat or a mod-info.json")
+		resp = fmt.Sprintf("上传的文件必须是模组压缩包（.zip）、mod-settings.dat 或 mod-list.json")
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -321,6 +322,81 @@ func ModDownloadHandler(w http.ResponseWriter, r *http.Request) {
 	writerHeader.Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", "all_installed_mods.zip"))
 }
 
+// DlcStateResponse is the answer of the DLC-endpoints. Skipped contains the
+// DLC-mods, that could not be enabled, because they are not installed.
+type DlcStateResponse struct {
+	factorio.DlcState
+	Skipped []string `json:"skipped"`
+}
+
+func newDlcStateResponse(state factorio.DlcState, skipped []string) DlcStateResponse {
+	if skipped == nil {
+		skipped = make([]string, 0)
+	}
+
+	return DlcStateResponse{
+		DlcState: state,
+		Skipped:  skipped,
+	}
+}
+
+// GetDlcStateHandler returns the state of the official "Space Age" DLC mods
+func GetDlcStateHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	var resp interface{}
+
+	defer func() {
+		WriteResponse(w, resp)
+	}()
+
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+
+	var state factorio.DlcState
+	state, err = factorio.GetDlcState()
+	if err != nil {
+		resp = fmt.Sprintf("读取 DLC 状态失败: %s", err)
+		log.Println(resp)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	resp = newDlcStateResponse(state, nil)
+}
+
+// SetDlcStateHandler enables or disables the official "Space Age" DLC mods
+func SetDlcStateHandler(w http.ResponseWriter, r *http.Request) {
+	var err error
+	var resp interface{}
+
+	defer func() {
+		WriteResponse(w, resp)
+	}()
+
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+
+	var data struct {
+		Enabled bool `json:"enabled"`
+	}
+	resp, err = ReadFromRequestBody(w, r, &data)
+	if err != nil {
+		return
+	}
+
+	state, skipped, err := factorio.SetDlcEnabled(data.Enabled)
+	if err != nil {
+		resp = fmt.Sprintf("切换 DLC 状态失败: %s", err)
+		log.Println(resp)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if data.Enabled && len(skipped) > 0 {
+		log.Printf("could not enable DLC mods %s, they are not installed", strings.Join(skipped, ", "))
+	}
+
+	resp = newDlcStateResponse(state, skipped)
+}
+
 // LoadModsFromSaveHandler returns JSON response with the found mods
 func LoadModsFromSaveHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
@@ -347,7 +423,7 @@ func LoadModsFromSaveHandler(w http.ResponseWriter, r *http.Request) {
 
 	f, err := factorio.OpenArchiveFile(path, "level.dat", "level-init.dat")
 	if err != nil {
-		resp = fmt.Sprintf("cannot open save level file: %v", err)
+		resp = fmt.Sprintf("无法打开存档的 level 文件：%v", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -358,7 +434,7 @@ func LoadModsFromSaveHandler(w http.ResponseWriter, r *http.Request) {
 	err = header.ReadFrom(f)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("cannot read save header: %v", err)
+		resp = fmt.Sprintf("无法读取存档头部信息：%v", err)
 		log.Println(resp)
 		return
 	}

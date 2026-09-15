@@ -6,7 +6,7 @@ import modsResource from "../../../../api/resources/mods";
 
 const UploadMod = ({refetchInstalledMods}) => {
 
-    const defaultFileName = 'Select File ...'
+    const defaultFileName = '选择文件 ...'
     const [fileName, setFileName] = useState(defaultFileName);
     const {register, handleSubmit} = useForm();
     const [isUploading, setIsUploading] = useState(false);
@@ -24,7 +24,7 @@ const UploadMod = ({refetchInstalledMods}) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Label text="Save" htmlFor="mod_file"/>
+            <Label text="模组文件" htmlFor="mod_file"/>
             <div className="relative bg-white shadow text-black h-full w-full mb-4">
                 <input
                     {...register('mod_file')}
@@ -36,7 +36,7 @@ const UploadMod = ({refetchInstalledMods}) => {
                 />
                 <div className="px-2 py-2">{fileName}</div>
             </div>
-            <Button isLoading={isUploading} isSubmit={true}>Upload</Button>
+            <Button isLoading={isUploading} isSubmit={true}>上传</Button>
         </form>
     )
 }

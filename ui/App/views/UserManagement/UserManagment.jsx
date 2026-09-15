@@ -29,15 +29,15 @@ const UserManagement = () => {
     return (
         <>
             <Panel
-                title="List of Users"
+                title="用户列表"
                 content={
                     <table className="w-full">
                         <thead>
                         <tr className="text-left py-1">
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Email</th>
-                            <th>Actions</th>
+                            <th>用户名</th>
+                            <th>角色</th>
+                            <th>邮箱</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,12 +57,12 @@ const UserManagement = () => {
                 className="mb-4"
             />
             <Panel
-                title="Change Password"
+                title="修改密码"
                 content={<ChangePasswordForm/>}
                 className="mb-4"
             />
             <Panel
-                title="Create User"
+                title="新建用户"
                 content={<CreateUserForm updateUserList={updateList}/>}
                 className="mb-4"
             />

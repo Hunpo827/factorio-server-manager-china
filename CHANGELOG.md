@@ -4,10 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.11.0] - TBD
+### Added
+- 游戏 DLC（官方模组）总开关：可以在模组页一键开启/关闭《太空时代》DLC
+  （`space-age`、`quality`、`elevated-rails`）。这些模组随游戏本体安装在 `data` 目录中，
+  并不会出现在普通的模组列表里，因此以前无法在管理器中开关。
+- 自动补齐新版游戏新增的服务器设置项：加载 `server-settings.json` 时，会把当前游戏版本
+  （如 2.0）默认文件中存在、而配置文件里缺失的选项自动补上，并在界面中以“（新增）”标记。
+
 ### Changed
 - Configuration environment variables are now uppercase and prefixed with FSM
 - updated all dependencies - Thanks to @jannaahs and @knoxfighter
 - removed CGO as dependency
+- 界面、提示信息与错误信息全部改为中文
+- 模组门户的版本兼容性判断改为与已安装模组一致（必须主次版本相同），
+  修复了 2.0 服务器上把 1.1 版本模组显示为“兼容”的问题
+- 修复服务器设置页面表单字段未注册、导致无法保存的问题
+- 修复模组页“删除全部模组”按钮因 `&&` 链接写法而不显示的问题
 
 ## [0.10.1] - 2021-03-09
 ### Fixed

@@ -31,52 +31,52 @@ const CreateUserForm = ({updateUserList}) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-                <Label htmlFor="username" text="Username"/>
+                <Label htmlFor="username" text="用户名"/>
                 <Input register={register('username', {required: true})}
                        type="text"
-                       placeholder="Username"
+                       placeholder="用户名"
                 />
-                <Error error={errors.username} message="Username is required"/>
+                <Error error={errors.username} message="请填写用户名"/>
             </div>
             <div className="mb-4">
-                <Label htmlFor="role" text="Role"/>
+                <Label htmlFor="role" text="角色"/>
                 <Input register={register('role', {required: true})}
                        value={roleValue}
                        disabled={true}
-                       placeholder="Role"
+                       placeholder="角色"
                 />
-                <Error error={errors.role} message="Role is required"/>
+                <Error error={errors.role} message="请填写角色"/>
             </div>
             <div className="mb-4">
-                <Label htmlFor="email" text="Email"/>
+                <Label htmlFor="email" text="邮箱"/>
                 <Input register={register('email', {required: true})}
                        type="email"
-                       placeholder="Email"
+                       placeholder="邮箱"
                 />
-                <Error error={errors.email} message="Email is required"/>
+                <Error error={errors.email} message="请填写邮箱"/>
             </div>
             <div className="mb-4">
-                <Label htmlFor="password" text="Password"/>
+                <Label htmlFor="password" text="密码"/>
                 <Input register={register('password', {required: true})}
                        type="password"
-                       placeholder="Password"
+                       placeholder="密码"
                 />
-                <Error error={errors.password} message="Password is required"/>
+                <Error error={errors.password} message="请填写密码"/>
             </div>
             <div className="mb-4">
-                <Label htmlFor="password_confirmation" text="Password Confirmation"/>
+                <Label htmlFor="password_confirmation" text="确认密码"/>
                 <Input register={register('password_confirmation', {
                             required: true,
                             validate: conformation => conformation === password
                         })}
 
                        type="password"
-                       placeholder="Password Confirmation"
+                       placeholder="确认密码"
                 />
                 <Error error={errors.password_confirmation}
-                       message="Password Confirmation is required and must match the Password"/>
+                       message="请再次输入密码，且必须与密码一致"/>
             </div>
-            <Button isSubmit={true} type="success">Save</Button>
+            <Button isSubmit={true} type="success">保存</Button>
         </form>
     )
 }

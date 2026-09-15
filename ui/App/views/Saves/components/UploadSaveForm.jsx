@@ -7,7 +7,7 @@ import Error from "../../../components/Error";
 
 const UploadSaveForm = ({onSuccess}) => {
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const [fileName, setFileName] = useState('Select File ...');
+    const [fileName, setFileName] = useState('选择文件 ...');
 
     const onSubmit = (data, e) => {
         saves.upload(data.savefile[0]).then(_ => {
@@ -20,7 +20,7 @@ const UploadSaveForm = ({onSuccess}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-6">
                 <label className="block text-white text-sm font-bold mb-2" htmlFor="password">
-                    Save File
+                    存档文件
                 </label>
                 <div className="relative bg-white shadow text-black w-full">
                     <input
@@ -30,9 +30,9 @@ const UploadSaveForm = ({onSuccess}) => {
                         type="file"/>
                     <div className="px-2 py-3">{fileName}</div>
                 </div>
-                <Error error={errors.savefile} message="Savefile is required"/>
+                <Error error={errors.savefile} message="请选择存档文件"/>
             </div>
-            <Button type="success" isSubmit={true}>Upload</Button>
+            <Button type="success" isSubmit={true}>上传</Button>
         </form>
     )
 }

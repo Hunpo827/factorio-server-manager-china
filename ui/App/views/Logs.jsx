@@ -15,7 +15,7 @@ const Logs = () => {
 
     return (
         <Panel
-            title="Logs"
+            title="日志"
             content={
                 <ul>
                     {logs.map((log,index) => (<li key={index}>{log}</li>))}

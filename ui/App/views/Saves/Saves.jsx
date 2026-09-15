@@ -35,19 +35,18 @@ const Saves = ({serverStatus}) => {
         <>
             <div className="lg:flex mb-6">
                 <Panel
-                    title="Create Save"
+                    title="创建存档"
                     className="lg:w-1/2 lg:mr-3 mb-6 lg:mb-0"
                     content={
                         serverStatus.running
                             ? <p className="text-red-light pt-4 pb-24">
-                                Create a new Save is only possible if the Factorio server is
-                                not running.
+                                只有在 Factorio 服务器停止运行时，才能创建新存档。
                             </p>
                             : <CreateSaveForm onSuccess={updateList}/>
                     }
                 />
                 <Panel
-                    title="Upload Save"
+                    title="上传存档"
                     className="lg:w-1/2 lg:ml-3"
                     content={<UploadSaveForm onSuccess={updateList}/>}
                 />
@@ -55,16 +54,16 @@ const Saves = ({serverStatus}) => {
 
             <Panel
                 className="mb-4"
-                title="Saves"
+                title="存档列表"
                 content={
                     <div className="overflow-x-auto w-full">
                         <table className="w-full">
                             <thead>
                             <tr className="text-left py-1">
-                                <th>Name</th>
-                                <th>Last Modified At</th>
-                                <th>Size</th>
-                                <th>Actions</th>
+                                <th>名称</th>
+                                <th>最后修改时间</th>
+                                <th>大小</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>

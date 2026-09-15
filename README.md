@@ -3,6 +3,21 @@
 
 # Factorio Server Manager
 
+> **本仓库是上游项目的分支（fork）**
+>
+> 上游仓库：<https://github.com/OpenFactorioServerManager/factorio-server-manager>
+>
+> 本分支的改动（基于上游 `develop`）：
+>
+> - **纯中文界面**：界面文案、操作提示、错误信息全部汉化（不提供多语言切换）
+> - **《太空时代》DLC 总开关**：在模组页一键开启/关闭 `space-age`、`quality`、
+>   `elevated-rails` 三个随游戏本体发布的官方模组
+> - **新版选项自动补齐**：自动补上当前游戏版本新增、而旧 `server-settings.json` 缺失的设置项
+> - **修复**：服务器设置页无法保存、模组页「删除全部模组」按钮不显示、
+>   模组版本兼容性判断错误（2.0 服务器把 1.1 模组显示为兼容）
+>
+> 改动明细见 [CHANGELOG.md](CHANGELOG.md)。本项目沿用上游的 MIT 许可证，版权归原作者所有。
+
 ### A tool for managing Factorio servers.
 This tool runs on a Factorio server and allows management of the Factorio server, saves, mods and many other features.
 

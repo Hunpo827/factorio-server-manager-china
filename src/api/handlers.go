@@ -21,7 +21,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const readHttpBodyError = "Could not read the Request Body."
+const readHttpBodyError = "无法读取请求内容"
 
 type JSONResponseFileInput struct {
 	Success   bool        `json:"success"`
@@ -39,7 +39,7 @@ func WriteResponse(w http.ResponseWriter, data interface{}) {
 
 func ReadRequestBody(w http.ResponseWriter, r *http.Request) (body []byte, resp interface{}, err error) {
 	if r.Body == nil {
-		resp = fmt.Sprintf("%s: no request body", readHttpBodyError)
+		resp = fmt.Sprintf("%s：请求内容为空", readHttpBodyError)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		err = errors.New("no request body")
@@ -48,7 +48,7 @@ func ReadRequestBody(w http.ResponseWriter, r *http.Request) (body []byte, resp 
 
 	body, err = ioutil.ReadAll(r.Body)
 	if err != nil {
-		resp = fmt.Sprintf("%s: %s", readHttpBodyError, err)
+		resp = fmt.Sprintf("%s：%s", readHttpBodyError, err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -58,7 +58,7 @@ func ReadRequestBody(w http.ResponseWriter, r *http.Request) (body []byte, resp 
 func ReadSessionStore(w http.ResponseWriter, r *http.Request, name string) (session *sessions.Session, resp interface{}, err error) {
 	session, err = sessionStore.Get(r, name)
 	if err != nil {
-		resp = fmt.Sprintf("Error reading session cookie [%s]: %s", name, err)
+		resp = fmt.Sprintf("读取会话 Cookie 失败 [%s]：%s", name, err)
 		log.Println(resp)
 		if session != nil {
 			session.Options.MaxAge = -1
@@ -75,7 +75,7 @@ func ReadSessionStore(w http.ResponseWriter, r *http.Request, name string) (sess
 func SaveSession(w http.ResponseWriter, r *http.Request, session *sessions.Session) (resp interface{}, err error) {
 	err = session.Save(r, w)
 	if err != nil {
-		resp = fmt.Sprintf("Error saving session cookie: %s", err)
+		resp = fmt.Sprintf("保存会话 Cookie 失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -99,7 +99,7 @@ func ListSaves(w http.ResponseWriter, r *http.Request) {
 		var err error
 		withLatest, err = strconv.ParseBool(latestParam)
 		if err != nil {
-			resp = fmt.Sprintf("Error parsing latestParam: %s", err)
+			resp = fmt.Sprintf("解析 latestParam 参数失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusBadRequest)
 			return
@@ -108,7 +108,7 @@ func ListSaves(w http.ResponseWriter, r *http.Request) {
 
 	savesList, err := factorio.ListSaves()
 	if err != nil {
-		resp = fmt.Sprintf("Error listing save files: %s", err)
+		resp = fmt.Sprintf("获取存档列表失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -119,7 +119,7 @@ func ListSaves(w http.ResponseWriter, r *http.Request) {
 	if withLatest && len(savesList) != 0 {
 		latestSave, err := factorio.GetLatestSave()
 		if err != nil {
-			resp = fmt.Sprintf("Error getting latest save: %s", err)
+			resp = fmt.Sprintf("获取最新存档失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -160,14 +160,14 @@ func UploadSave(w http.ResponseWriter, r *http.Request) {
 		ext := filepath.Ext(saveFile.Filename)
 		if ext != ".zip" {
 			// Only zip-files allowed
-			resp = fmt.Sprintf("Fileformat {%s} is not allowed", ext)
+			resp = fmt.Sprintf("不允许的文件格式 {%s}", ext)
 			w.WriteHeader(http.StatusUnsupportedMediaType)
 			return
 		}
 
 		file, err := saveFile.Open()
 		if err != nil {
-			resp = fmt.Sprintf("Error opening uploaded saveFile: %s", err)
+			resp = fmt.Sprintf("打开上传的存档文件失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -176,7 +176,7 @@ func UploadSave(w http.ResponseWriter, r *http.Request) {
 
 		out, err := os.Create(filepath.Join(config.FactorioSavesDir, saveFile.Filename))
 		if err != nil {
-			resp = fmt.Sprintf("Error creating new savefile to copy uploaded on to: %s", err)
+			resp = fmt.Sprintf("创建新存档文件失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -185,14 +185,14 @@ func UploadSave(w http.ResponseWriter, r *http.Request) {
 
 		_, err = io.Copy(out, file)
 		if err != nil {
-			resp = fmt.Sprintf("Error coping uploaded file to created file on disk: %s", err)
+			resp = fmt.Sprintf("写入存档文件失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	}
 
-	resp = "Uploading files successful"
+	resp = "存档上传成功"
 }
 
 // Deletes provided save
@@ -211,7 +211,7 @@ func RemoveSave(w http.ResponseWriter, r *http.Request) {
 
 	save, err := factorio.FindSave(name)
 	if err != nil {
-		resp = fmt.Sprintf("Error finding save {%s}: %s", name, err)
+		resp = fmt.Sprintf("查找存档 {%s} 失败：%s", name, err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -219,14 +219,14 @@ func RemoveSave(w http.ResponseWriter, r *http.Request) {
 
 	err = save.Remove()
 	if err != nil {
-		resp = fmt.Sprintf("Error removing save {%s}: %s", name, err)
+		resp = fmt.Sprintf("删除存档 {%s} 失败：%s", name, err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	// save was removed
-	resp = fmt.Sprintf("Removed save: %s", save.Name)
+	resp = fmt.Sprintf("已删除存档：%s", save.Name)
 }
 
 // Launches Factorio server binary with --create flag to create save
@@ -243,7 +243,7 @@ func CreateSaveHandler(w http.ResponseWriter, r *http.Request) {
 	saveName := vars["save"]
 
 	if saveName == "" {
-		resp = fmt.Sprintf("Error creating save, no save name provided: %s", err)
+		resp = fmt.Sprintf("创建存档失败：未提供存档名：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -252,13 +252,13 @@ func CreateSaveHandler(w http.ResponseWriter, r *http.Request) {
 	saveFile := filepath.Join(config.FactorioSavesDir, saveName)
 	cmdOut, err := factorio.CreateSave(saveFile)
 	if err != nil {
-		resp = fmt.Sprintf("Error creating save {%s}: %s", saveName, err)
+		resp = fmt.Sprintf("创建存档 {%s} 失败：%s", saveName, err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	resp = fmt.Sprintf("Save %s created successfully. Command output: \n%s", saveName, cmdOut)
+	resp = fmt.Sprintf("存档 %s 创建成功。游戏输出：\n%s", saveName, cmdOut)
 }
 
 // LogTail returns last lines of the factorio-current.log file
@@ -274,7 +274,7 @@ func LogTail(w http.ResponseWriter, r *http.Request) {
 	config := bootstrap.GetConfig()
 	resp, err = factorio.TailLog()
 	if err != nil {
-		resp = fmt.Sprintf("Could not tail %s: %s", config.FactorioLog, err)
+		resp = fmt.Sprintf("无法读取日志文件 %s：%s", config.FactorioLog, err)
 		return
 	}
 }
@@ -292,7 +292,7 @@ func LoadConfig(w http.ResponseWriter, r *http.Request) {
 	config := bootstrap.GetConfig()
 	configContents, err := factorio.LoadConfig(config.FactorioConfigFile)
 	if err != nil {
-		resp = fmt.Sprintf("Could not retrieve config.ini: %s", err)
+		resp = fmt.Sprintf("读取 config.ini 失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -314,7 +314,7 @@ func StartServer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 
 	if server.GetRunning() {
-		resp = "Factorio server is already running"
+		resp = "Factorio 服务器已经在运行"
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
@@ -330,7 +330,7 @@ func StartServer(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &server)
 	if err != nil {
-		resp = fmt.Sprintf("Error unmarshalling server settings JSON: %s", err)
+		resp = fmt.Sprintf("解析服务器设置 JSON 失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -338,7 +338,7 @@ func StartServer(w http.ResponseWriter, r *http.Request) {
 
 	// Check if savefile was submitted with request to start server.
 	if server.Savefile == "" {
-		resp = "Error starting Factorio server: No save file provided"
+		resp = "启动 Factorio 服务器失败：未提供存档文件"
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -366,13 +366,13 @@ func StartServer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if server.GetRunning() == false {
-		resp = fmt.Sprintf("Error starting Factorio server: %s", err)
+		resp = fmt.Sprintf("启动 Factorio 服务器失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	resp = fmt.Sprintf("Factorio server with save: %s started on port: %d", server.Savefile, server.Port)
+	resp = fmt.Sprintf("Factorio 服务器已启动，存档：%s，端口：%d", server.Savefile, server.Port)
 	log.Println(resp)
 }
 
@@ -388,16 +388,16 @@ func StopServer(w http.ResponseWriter, r *http.Request) {
 	if server.GetRunning() {
 		err := server.Stop()
 		if err != nil {
-			resp = fmt.Sprintf("Error stopping factorio server: %s", err)
+			resp = fmt.Sprintf("停止 Factorio 服务器失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		resp = fmt.Sprintf("Factorio server stopped")
+		resp = fmt.Sprintf("Factorio 服务器已停止")
 		log.Println(resp)
 	} else {
-		resp = "Factorio server is not running"
+		resp = "Factorio 服务器未在运行"
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
@@ -415,15 +415,15 @@ func KillServer(w http.ResponseWriter, r *http.Request) {
 	if server.GetRunning() {
 		err := server.Kill()
 		if err != nil {
-			resp = fmt.Sprintf("Error killing factorio server: %s", err)
+			resp = fmt.Sprintf("强制结束 Factorio 服务器失败：%s", err)
 			log.Println(resp)
 			return
 		}
 
 		log.Printf("Killed Factorio server.")
-		resp = fmt.Sprintf("Factorio server killed")
+		resp = fmt.Sprintf("Factorio 服务器已被强制结束")
 	} else {
-		resp = "Factorio server is not running"
+		resp = "Factorio 服务器未在运行"
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }
@@ -454,7 +454,7 @@ func FactorioVersion(w http.ResponseWriter, r *http.Request) {
 func UnmarshallUserJson(body []byte, w http.ResponseWriter) (user User, resp interface{}, err error) {
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		resp = fmt.Sprintf("Unable to parse the request body: %s", err)
+		resp = fmt.Sprintf("解析请求内容失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 	}
@@ -487,7 +487,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	err = auth.checkPassword(user.Username, user.Password)
 	if err != nil {
-		resp = fmt.Sprintf("Password for user %s wrong", user.Username)
+		resp = fmt.Sprintf("用户 %s 的密码错误", user.Username)
 		log.Println(resp)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -533,7 +533,7 @@ func LogoutUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp = "User logged out successfully."
+	resp = "已成功退出登录。"
 }
 
 func GetCurrentLogin(w http.ResponseWriter, r *http.Request) {
@@ -556,7 +556,7 @@ func GetCurrentLogin(w http.ResponseWriter, r *http.Request) {
 
 	user, err := auth.getUser(username)
 	if err != nil {
-		resp = fmt.Sprintf("Error getting user: %s", err)
+		resp = fmt.Sprintf("获取用户信息失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -578,7 +578,7 @@ func ListUsers(w http.ResponseWriter, r *http.Request) {
 
 	users, err := auth.listUsers()
 	if err != nil {
-		resp = fmt.Sprintf("Error listing users: %s", err)
+		resp = fmt.Sprintf("获取用户列表失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -607,13 +607,13 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	err = auth.addUser(user)
 	if err != nil {
-		resp = fmt.Sprintf("Error in adding user {%s}: %s", user.Username, err)
+		resp = fmt.Sprintf("新增用户 {%s} 失败：%s", user.Username, err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	resp = fmt.Sprintf("User: %s successfully added.", user.Username)
+	resp = fmt.Sprintf("用户 %s 新增成功。", user.Username)
 }
 
 func RemoveUser(w http.ResponseWriter, r *http.Request) {
@@ -637,12 +637,12 @@ func RemoveUser(w http.ResponseWriter, r *http.Request) {
 
 	err = auth.deleteUser(user.Username)
 	if err != nil {
-		resp = fmt.Sprintf("Error in removing user {%s}, error: %s", user.Username, err)
+		resp = fmt.Sprintf("删除用户 {%s} 失败：%s", user.Username, err)
 		log.Println(resp)
 		return
 	}
 
-	resp = fmt.Sprintf("User: %s successfully removed.", user.Username)
+	resp = fmt.Sprintf("用户 %s 已删除。", user.Username)
 }
 
 func ChangePassword(w http.ResponseWriter, r *http.Request) {
@@ -666,7 +666,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		resp = fmt.Sprintf("Unable to parse the request body: %s", err)
+		resp = fmt.Sprintf("解析请求内容失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -684,7 +684,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	// check if password for user is correct
 	err = auth.checkPassword(username, user.OldPassword)
 	if err != nil {
-		resp = fmt.Sprintf("Password for user %s wrong", username)
+		resp = fmt.Sprintf("用户 %s 的密码错误", username)
 		log.Println(resp)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -692,7 +692,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	// only run, when confirmation correct
 	if user.NewPassword != user.NewPasswordConfirm {
-		resp = fmt.Sprintf("Password confirmation incorrect")
+		resp = fmt.Sprintf("两次输入的密码不一致")
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -700,7 +700,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	err = auth.changePassword(username, user.NewPassword)
 	if err != nil {
-		resp = fmt.Sprintf("Error changing password: %s", err)
+		resp = fmt.Sprintf("修改密码失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -719,7 +719,16 @@ func GetServerSettings(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	var server = factorio.GetFactorioServer()
-	resp = server.Settings
+
+	// the list of options, that were added while loading the settings
+	// (options of the installed factorio version, that the file was missing)
+	resp = struct {
+		Settings     map[string]interface{} `json:"settings"`
+		AddedOptions []string               `json:"added_options"`
+	}{
+		Settings:     server.Settings,
+		AddedOptions: factorio.GetAddedServerSettings(),
+	}
 
 	log.Printf("Sent server settings response")
 }
@@ -753,7 +762,7 @@ func UpdateServerSettings(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 
 	if err != nil {
-		resp = fmt.Sprintf("Error unmarhaling server settings JSON: %s", err)
+		resp = fmt.Sprintf("解析服务器设置 JSON 失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -761,7 +770,7 @@ func UpdateServerSettings(w http.ResponseWriter, r *http.Request) {
 
 	settings, err := json.MarshalIndent(&server.Settings, "", "  ")
 	if err != nil {
-		resp = fmt.Sprintf("Failed to marshal server settings: %s", err)
+		resp = fmt.Sprintf("序列化服务器设置失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -769,7 +778,7 @@ func UpdateServerSettings(w http.ResponseWriter, r *http.Request) {
 	config := bootstrap.GetConfig()
 	err = ioutil.WriteFile(config.SettingsFile, settings, 0644)
 	if err != nil {
-		resp = fmt.Sprintf("Failed to save server settings: %v\n", err)
+		resp = fmt.Sprintf("保存服务器设置失败：%v\n", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -781,18 +790,18 @@ func UpdateServerSettings(w http.ResponseWriter, r *http.Request) {
 		// save admins to adminJson
 		admins, err := json.MarshalIndent(server.Settings["admins"], "", "  ")
 		if err != nil {
-			resp = fmt.Sprintf("Failed to marshal admins-Setting: %s", err)
+			resp = fmt.Sprintf("序列化管理员设置失败：%s", err)
 			log.Println(resp)
 			return
 		}
 
 		err = ioutil.WriteFile(config.FactorioAdminFile, admins, 0664)
 		if err != nil {
-			resp = fmt.Sprintf("Failed to save admins: %s", err)
+			resp = fmt.Sprintf("保存管理员列表失败：%s", err)
 			log.Println(resp)
 			return
 		}
 	}
 
-	resp = fmt.Sprintf("Settings successfully saved")
+	resp = fmt.Sprintf("设置保存成功")
 }

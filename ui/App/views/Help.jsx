@@ -4,17 +4,17 @@ import React from "react";
 const Help = () => {
     return (
         <Panel
-            title="Help"
+            title="帮助"
             content={
                 <>
-                    <h1 className="text-xl text-dirty-white">Factorio Server Manager</h1>
-                    <p className="mb-2">The Factorio Server Manager (FSM) is an open source project and is not affiliated to the game Factorio or Wube Software.</p>
+                    <h1 className="text-xl text-dirty-white">Factorio 服务器管理器</h1>
+                    <p className="mb-2">Factorio 服务器管理器（FSM）是一个开源项目，与 Factorio 游戏及 Wube Software 没有任何关联。</p>
 
-                    <h2 className="text-dirty-white">Bugs and Help</h2>
-                    <p className="mb-4">Please use the <a className="text-blue hover:text-blue-light" target="_blank" href="https://github.com/OpenFactorioServerManager/factorio-server-manager/issues">GitHub repository</a> to report bugs or seek for help.</p>
+                    <h2 className="text-dirty-white">问题反馈与帮助</h2>
+                    <p className="mb-4">如需反馈问题或寻求帮助，请前往 <a className="text-blue hover:text-blue-light" target="_blank" href="https://github.com/OpenFactorioServerManager/factorio-server-manager/issues">GitHub 仓库</a> 提交 Issue。</p>
 
-                    <h1 className="mb-1 text-xl text-dirty-white">Helpful Resources</h1>
-                    <p className="mb-2"><a className="text-blue hover:text-blue-light" target="_blank" href="https://wiki.factorio.com/Multiplayer">Official Factorio Wiki about Multiplayer</a></p>
+                    <h1 className="mb-1 text-xl text-dirty-white">相关资源</h1>
+                    <p className="mb-2"><a className="text-blue hover:text-blue-light" target="_blank" href="https://wiki.factorio.com/Multiplayer">Factorio 官方 Wiki：多人游戏</a></p>
                 </>
             }
         />

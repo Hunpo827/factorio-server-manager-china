@@ -21,8 +21,8 @@ function ConfirmDialog({title, content, isOpen, close, onSuccess}) {
             content={content}
             actions={
                 <>
-                    <Button size="sm" type="danger" className="mr-2" onClick={close}>Cancel</Button>
-                    <Button size="sm" isLoading={isLoading} type="success" onClick={confirm}>Confirm</Button>
+                    <Button size="sm" type="danger" className="mr-2" onClick={close}>取消</Button>
+                    <Button size="sm" isLoading={isLoading} type="success" onClick={confirm}>确定</Button>
                 </>
             }
             isOpen={isOpen}

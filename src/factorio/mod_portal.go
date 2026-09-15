@@ -96,7 +96,10 @@ func ModPortalModDetails(modId string) (ModPortalStruct, error, int) {
 
 	for key, release := range mod.Releases {
 		requiredVersion = release.InfoJSON.FactorioVersion
-		release.Compatibility = installedBaseVersion.Compatible(requiredVersion, ">=")
+		// factorio does not load mods, that are made for another
+		// major.minor version (e.g. a 1.1 mod on a 2.0 server), so the
+		// same check as for the installed mods is used here
+		release.Compatibility = installedBaseVersion.GEC(requiredVersion)
 		mod.Releases[key] = release
 	}
 

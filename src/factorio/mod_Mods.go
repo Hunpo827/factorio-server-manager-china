@@ -141,7 +141,7 @@ func (mods *Mods) DownloadMod(url string, filename string, modId string) error {
 	}
 	if status == false {
 		log.Printf("error: credentials are invalid")
-		return errors.New("error: credentials are invalid")
+		return errors.New("Factorio 账号凭证无效，请重新登录")
 	}
 
 	//download the mod from the mod portal api
@@ -181,7 +181,7 @@ func (mods *Mods) UploadMod(file multipart.File, header *multipart.FileHeader) e
 
 	if filepath.Ext(header.Filename) != ".zip" {
 		log.Print("The uploaded file wasn't a zip-file")
-		return errors.New("the uploaded file wasn't a zip-file")
+		return errors.New("上传的文件不是压缩包（.zip）")
 	}
 
 	fileByteArray, err := ioutil.ReadAll(file)

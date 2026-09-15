@@ -154,7 +154,7 @@ func (modSimpleList *ModSimpleList) ToggleMod(modName string) (error, bool) {
 	}
 
 	if !found {
-		return errors.New("mod is not installed"), newEnabled
+		return errors.New("模组未安装"), newEnabled
 	}
 
 	err = modSimpleList.saveModInfoJson()
@@ -166,4 +166,27 @@ func (modSimpleList *ModSimpleList) ToggleMod(modName string) (error, bool) {
 	//i changed it already don't need to reload it
 
 	return nil, newEnabled
+}
+
+// SetModEnabled sets the enabled-state of a mod inside the mod-list.json.
+// If the mod is not part of the mod-list.json yet, an entry for it is created.
+// It returns true, if the mod-list.json was changed.
+func (modSimpleList *ModSimpleList) SetModEnabled(modName string, enabled bool) (bool, error) {
+	for index, mod := range modSimpleList.Mods {
+		if mod.Name == modName {
+			if mod.Enabled == enabled {
+				return false, nil
+			}
+
+			modSimpleList.Mods[index].Enabled = enabled
+			return true, modSimpleList.saveModInfoJson()
+		}
+	}
+
+	modSimpleList.Mods = append(modSimpleList.Mods, ModSimple{
+		Name:    modName,
+		Enabled: enabled,
+	})
+
+	return true, modSimpleList.saveModInfoJson()
 }

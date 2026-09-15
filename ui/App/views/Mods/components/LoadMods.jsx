@@ -46,7 +46,7 @@ const LoadMods = ({refreshMods}) => {
         await modResource.portal.installMultiple(mods)
             .then(() => {
                 refreshMods();
-                window.flash(`Mods are loaded from save file ${data.save}.`, "green");
+                window.flash(`已从存档 ${data.save} 加载模组。`, "green");
             }).finally(() => {
                 setIsLoading(false);
                 setLoadModsData(undefined);
@@ -55,7 +55,7 @@ const LoadMods = ({refreshMods}) => {
 
     return isFactorioAuthenticated
         ? <form onSubmit={handleSubmit(loadModsRequested)}>
-            <Label text="Save" htmlFor="save"/>
+            <Label text="存档" htmlFor="save"/>
             <Select
                 register={register('save')}
                 className="mb-4"
@@ -65,10 +65,10 @@ const LoadMods = ({refreshMods}) => {
                     value: save.name
                 }))}
             />
-            <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>Load</Button>
+            <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>加载</Button>
             <ConfirmDialog
-                title="Load Mods from Save"
-                content={`Loading the Mods from Save "${loadModsData?.save}" will remove all currently installed Mods.`}
+                title="从存档加载模组"
+                content={`从存档 "${loadModsData?.save}" 加载模组会先删除当前已安装的全部模组。`}
                 isOpen={loadModsData !== undefined}
                 close={() => {
                     setIsLoading(false);

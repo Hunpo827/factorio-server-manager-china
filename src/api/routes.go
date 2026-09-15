@@ -23,7 +23,7 @@ func ServerOffMiddleware(next http.Handler) http.Handler {
 		// only run if server is turned off
 		server := factorio.GetFactorioServer()
 		if server.GetRunning() {
-			http.Error(w, "factorio server still running", http.StatusLocked)
+			http.Error(w, "Factorio 服务器正在运行，请先停止服务器", http.StatusLocked)
 		} else {
 			next.ServeHTTP(w, r)
 		}
@@ -349,6 +349,20 @@ var apiRoutes = Routes{
 		"/mods/download",
 		ModDownloadHandler,
 		false,
+	},
+	// Official DLC ("Space Age") Mods
+	{
+		"GetDlcState",
+		"GET",
+		"/mods/dlc",
+		GetDlcStateHandler,
+		false,
+	}, {
+		"SetDlcState",
+		"POST",
+		"/mods/dlc/toggle",
+		SetDlcStateHandler,
+		true,
 	},
 	// Mod Packs
 	{

@@ -145,6 +145,13 @@ func NewFactorioServer() (err error) {
 
 	log.Printf("Loaded Factorio settings from %s\n", settingsPath)
 
+	// add options, that the installed factorio version knows about, but that
+	// are not part of this (maybe older) server-settings.json yet
+	if added := MergeServerSettingsDefaults(server.Settings); len(added) > 0 {
+		log.Printf("Server settings were missing %d option(s) of the installed factorio version, added them: %s",
+			len(added), strings.Join(added, ", "))
+	}
+
 	out := []byte{}
 	//Load factorio version
 	if config.GlibcCustom == "true" {
@@ -237,7 +244,7 @@ func (server *Server) Run() error {
 	}
 
 	if len(saves) == 0 {
-		return errors.New("No savefile exists on the server")
+		return errors.New("服务器上没有任何存档文件")
 	}
 
 	args := []string{}

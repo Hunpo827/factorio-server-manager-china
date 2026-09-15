@@ -10,8 +10,8 @@ import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import SelectVersionForm from "./SelectVersionForm";
 
 const LinkModPortal = () => {
-    return <a href="https://mods.factorio.com" target="_blank" className="px-2 text-blue hover:text-blue-light">Mod
-        Portal <FontAwesomeIcon icon={faExternalLinkAlt}/></a>
+    return <a href="https://mods.factorio.com" target="_blank" className="px-2 text-blue hover:text-blue-light">模组
+        门户 <FontAwesomeIcon icon={faExternalLinkAlt}/></a>
 }
 
 const AddModForm = ({setIsFactorioAuthenticated, fuse, refetchInstalledMods}) => {
@@ -101,11 +101,11 @@ const AddModForm = ({setIsFactorioAuthenticated, fuse, refetchInstalledMods}) =>
         <form onSubmit={handleSubmit(openSelectVersionModal)}>
             <SelectVersionForm isOpen={isModalOpen} releases={releases} install={install} close={() => setIsModalOpen(false)}/>
             <div className="mb-4 relative" >
-                <Label text="Mod" htmlFor="mod"/>
+                <Label text="模组" htmlFor="mod"/>
                 { typeof fuse !== "undefined"
                     ? <Input register={register('mod',{required: true})} hasAutoComplete={false} onKeyDown={handleKeyDown}/>
                     : <div className="border border-gray-medium w-full py-2 px-3 text-white">
-                        <FontAwesomeIcon icon={faSpinner} spin={true}/> Loading List of Mods from <LinkModPortal/>
+                        <FontAwesomeIcon icon={faSpinner} spin={true}/> 正在从 <LinkModPortal/> 加载模组列表
                     </div>
                 }
                 {suggestedMods.length > 0 &&
@@ -114,8 +114,8 @@ const AddModForm = ({setIsFactorioAuthenticated, fuse, refetchInstalledMods}) =>
                     </ul>
                 }
             </div>
-            <Button isDisabled={selectedMod === null} isSubmit={true} onClick={() => setIsModalOpen(true)} className="mr-2">Install</Button>
-            <Button onClick={logout} type="danger" className="mr-2">Logout</Button>
+            <Button isDisabled={selectedMod === null} isSubmit={true} onClick={() => setIsModalOpen(true)} className="mr-2">安装</Button>
+            <Button onClick={logout} type="danger" className="mr-2">退出登录</Button>
             <LinkModPortal/>
         </form>
     )

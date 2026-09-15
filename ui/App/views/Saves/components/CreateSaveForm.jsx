@@ -23,11 +23,11 @@ const CreateSaveForm = ({onSuccess}) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-6">
-                <Label text="Savefile Name" htmlFor="savefile"/>
+                <Label text="存档文件名" htmlFor="savefile"/>
                 <Input register={register('savefile', {required: true})}/>
-                <Error error={errors.savefile} message="Savefile Name is required"/>
+                <Error error={errors.savefile} message="请填写存档文件名"/>
             </div>
-            <Button type="success" isLoading={isLoading} isSubmit={true}>Create Save</Button>
+            <Button type="success" isLoading={isLoading} isSubmit={true}>创建存档</Button>
         </form>
     )
 }

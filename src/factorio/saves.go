@@ -52,12 +52,12 @@ func FindSave(name string) (*Save, error) {
 		}
 	}
 
-	return nil, errors.New("save not found")
+	return nil, errors.New("找不到存档")
 }
 
 func (s *Save) Remove() error {
 	if s.Name == "" {
-		return errors.New("save name cannot be blank")
+		return errors.New("存档名不能为空")
 	}
 	config := bootstrap.GetConfig()
 	return os.Remove(filepath.Join(config.FactorioSavesDir, s.Name))

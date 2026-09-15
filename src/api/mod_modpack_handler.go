@@ -18,10 +18,10 @@ import (
 func CheckModPackExists(modPackMap factorio.ModPackMap, modPackName string, w http.ResponseWriter) (resp interface{}, err error) {
 	exists := modPackMap.CheckModPackExists(modPackName)
 	if !exists {
-		resp = fmt.Sprintf("requested modPack {%s} does not exist", modPackName)
+		resp = fmt.Sprintf("请求的模组包 {%s} 不存在", modPackName)
 		log.Println(resp)
 		w.WriteHeader(http.StatusNotFound)
-		err = errors.New("requested modPack does not exist")
+		err = errors.New("请求的模组包不存在")
 	}
 	return
 }
@@ -30,7 +30,7 @@ func CreateNewModPackMap(w http.ResponseWriter) (modPackMap factorio.ModPackMap,
 	modPackMap, err = factorio.NewModPackMap()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error creating modpackmap aka. list of all modpacks files : %s", err)
+		resp = fmt.Sprintf("创建模组包列表失败：%s", err)
 		log.Println(resp)
 	}
 	return
@@ -98,7 +98,7 @@ func ModPackCreateHandler(w http.ResponseWriter, r *http.Request) {
 	err = modPackMap.CreateModPack(modPackStruct.Name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error creating modpack file: %s", err)
+		resp = fmt.Sprintf("创建模组包失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -126,7 +126,7 @@ func ModPackDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	err = modPackMap.DeleteModPack(modPackName)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error deleting modpack file: %s", err)
+		resp = fmt.Sprintf("删除模组包失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -185,7 +185,7 @@ func ModPackDownloadHandler(w http.ResponseWriter, r *http.Request) {
 		return nil
 	})
 	if err != nil {
-		resp = fmt.Sprintf("error on walking over the modpack: %s", err)
+		resp = fmt.Sprintf("读取模组包内容失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "application/json;charset=UTF-8")
@@ -216,7 +216,7 @@ func ModPackLoadHandler(w http.ResponseWriter, r *http.Request) {
 	err = modPackMap[modPackName].LoadModPack()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error loading modpack file: %s", err)
+		resp = fmt.Sprintf("载入模组包失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -270,7 +270,7 @@ func ModPackModToggleHandler(w http.ResponseWriter, r *http.Request) {
 	err, resp = packMap[packName].Mods.ModSimpleList.ToggleMod(modPackStruct.ModName)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error toggling mod inside modPack: %s", err)
+		resp = fmt.Sprintf("切换模组包内模组的启用状态失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -302,7 +302,7 @@ func ModPackModDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	err = packMap[packName].Mods.DeleteMod(modPackStruct.Name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error deleting mod {%s} in modpack {%s}: %s", modPackStruct.Name, packName, err)
+		resp = fmt.Sprintf("删除模组 {%s}（模组包 %s）失败：%s", modPackStruct.Name, packName, err)
 		log.Println(resp)
 		return
 	}
@@ -340,7 +340,7 @@ func ModPackModUpdateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		resp = fmt.Sprintf("Error updating mod {%s} in modpack {%s}: %s", modPackStruct.ModName, packName, err)
+		resp = fmt.Sprintf("更新模组 {%s}（模组包 %s）失败：%s", modPackStruct.ModName, packName, err)
 		log.Println(resp)
 		return
 	}
@@ -356,7 +356,7 @@ func ModPackModUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !found {
-		resp = fmt.Sprintf(`Could not find mod %s`, modPackStruct.ModName)
+		resp = fmt.Sprintf(`找不到模组 %s`, modPackStruct.ModName)
 		log.Println(resp)
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -378,7 +378,7 @@ func ModPackModDeleteAllHandler(w http.ResponseWriter, r *http.Request) {
 	// Delete Modpack
 	err = packMap.DeleteModPack(packName)
 	if err != nil {
-		resp = fmt.Sprintf("Error deleting modPackDir: %s", err)
+		resp = fmt.Sprintf("删除模组包目录失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -386,7 +386,7 @@ func ModPackModDeleteAllHandler(w http.ResponseWriter, r *http.Request) {
 	// recreate modPack without mods
 	err = packMap.CreateEmptyModPack(packName)
 	if err != nil {
-		resp = fmt.Sprintf("Error recreating modPackDir: %s", err)
+		resp = fmt.Sprintf("重建模组包目录失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -406,7 +406,7 @@ func ModPackModUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	formFile, fileHeader, err := r.FormFile("mod_file")
 	if err != nil {
-		resp = fmt.Sprintf("error getting uploaded file: %s", err)
+		resp = fmt.Sprintf("获取上传文件失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -417,7 +417,7 @@ func ModPackModUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = modPackMap[modPackName].Mods.UploadMod(formFile, fileHeader)
 	if err != nil {
-		resp = fmt.Sprintf("error saving file to modPack: %s", err)
+		resp = fmt.Sprintf("保存文件到模组包失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -456,7 +456,7 @@ func ModPackModPortalInstallHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = modList.DownloadMod(data.DownloadURL, data.Filename, data.ModName)
 	if err != nil {
-		resp = fmt.Sprintf("Error downloading a mod: %s", err)
+		resp = fmt.Sprintf("下载模组失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -492,7 +492,7 @@ func ModPackModPortalInstallMultipleHandler(w http.ResponseWriter, r *http.Reque
 	for _, datum := range data {
 		details, err, statusCode := factorio.ModPortalModDetails(datum.Name)
 		if err != nil || statusCode != http.StatusOK {
-			resp = fmt.Sprintf("Error in getting mod details from mod portal: %s", err)
+			resp = fmt.Sprintf("从模组门户获取模组详情失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -507,7 +507,7 @@ func ModPackModPortalInstallMultipleHandler(w http.ResponseWriter, r *http.Reque
 
 				err := modList.DownloadMod(release.DownloadURL, release.FileName, details.Name)
 				if err != nil {
-					resp = fmt.Sprintf("Error downloading mod {%s}, error: %s", details.Name, err)
+					resp = fmt.Sprintf("下载模组 {%s} 失败：%s", details.Name, err)
 					log.Println(resp)
 					w.WriteHeader(http.StatusInternalServerError)
 					return

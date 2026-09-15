@@ -23,7 +23,7 @@ func ModPortalListModsHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err, statusCode = factorio.ModPortalList()
 	w.WriteHeader(statusCode)
 	if err != nil {
-		resp = fmt.Sprintf("Error in listing mods from mod portal: %s\nresponse: %+v", err, resp)
+		resp = fmt.Sprintf("从模组门户获取模组列表失败：%s\n返回内容：%+v", err, resp)
 		log.Println(resp)
 		return
 	}
@@ -47,7 +47,7 @@ func ModPortalModInfoHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err, statusCode = factorio.ModPortalModDetails(modId)
 
 	if err != nil {
-		resp = fmt.Sprintf("Error in getting mod details from mod portal: %s", err)
+		resp = fmt.Sprintf("从模组门户获取模组详情失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -84,7 +84,7 @@ func ModPortalInstallHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = mods.DownloadMod(data.DownloadURL, data.Filename, data.ModName)
 	if err != nil {
-		resp = fmt.Sprintf("Error downloading a mod: %s", err)
+		resp = fmt.Sprintf("下载模组失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -115,7 +115,7 @@ func ModPortalLoginHandler(w http.ResponseWriter, r *http.Request) {
 	err, statusCode := factorio.FactorioLogin(data.Username, data.Password)
 	w.WriteHeader(statusCode)
 	if err != nil {
-		resp = fmt.Sprintf("Error trying to login into Factorio: %s", err)
+		resp = fmt.Sprintf("登录 Factorio 账号失败：%s", err)
 		log.Println(resp)
 		return
 	}
@@ -133,7 +133,7 @@ func ModPortalLoginStatusHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err = credentials.Load()
 
 	if err != nil {
-		resp = fmt.Sprintf("Error getting the factorio credentials: %s", err)
+		resp = fmt.Sprintf("获取 Factorio 账号凭证失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -152,7 +152,7 @@ func ModPortalLogoutHandler(w http.ResponseWriter, r *http.Request) {
 	err = credentials.Del()
 
 	if err != nil {
-		resp = fmt.Sprintf("Error on logging out of factorio: %s", err)
+		resp = fmt.Sprintf("退出 Factorio 账号失败：%s", err)
 		log.Println(resp)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -192,7 +192,7 @@ func ModPortalInstallMultipleHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		details, err, statusCode := factorio.ModPortalModDetails(datum.Name)
 		if err != nil || statusCode != http.StatusOK {
-			resp = fmt.Sprintf("Error in getting mod details from mod portal: %s", err)
+			resp = fmt.Sprintf("从模组门户获取模组详情失败：%s", err)
 			log.Println(resp)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -206,7 +206,7 @@ func ModPortalInstallMultipleHandler(w http.ResponseWriter, r *http.Request) {
 
 				err := modList.DownloadMod(release.DownloadURL, release.FileName, details.Name)
 				if err != nil {
-					resp = fmt.Sprintf("Error downloading mod {%s}, error: %s", details.Name, err)
+					resp = fmt.Sprintf("下载模组 {%s} 失败：%s", details.Name, err)
 					log.Println(resp)
 					w.WriteHeader(http.StatusInternalServerError)
 					return

@@ -12,6 +12,7 @@ import Fuse from "fuse.js";
 import CreateModPack from "./components/CreateModPack";
 import ModPack from "./components/ModPack";
 import ModList from "./components/ModList";
+import DlcSwitch from "./components/DlcSwitch";
 
 const Mods = ({serverStatus}) => {
 
@@ -107,29 +108,30 @@ const Mods = ({serverStatus}) => {
 
     return (
         <div>
+            <DlcSwitch disabled={serverStatus.running}/>
             {disabled ?
                 <Panel className="mb-6"
                        content={
                            <div className="text-red font-bold text-xl">
-                               Changing mods is disabled while the server is running!
+                               服务器运行中，无法修改模组，请先停止服务器！
                            </div>
                        }
                 />
                 :
                 <TabControl>
-                    <Tab title="Install Mod">
+                    <Tab title="安装模组">
                         <AddMod refetchInstalledMods={fetchInstalledMods} fuse={fuse}/>
                     </Tab>
-                    <Tab title="Upload Mod">
+                    <Tab title="上传模组">
                         <UploadMod refetchInstalledMods={fetchInstalledMods}/>
                     </Tab>
-                    <Tab title="Load Mods from Save">
+                    <Tab title="从存档加载模组">
                         <LoadMods refreshMods={fetchInstalledMods}/>
                     </Tab>
                 </TabControl>
             }
             <Panel
-                title="Mods"
+                title="已安装模组"
                 className="mb-6"
                 content={
                     <ModList addUpdatableMod={addUpdatableMod}
@@ -143,21 +145,20 @@ const Mods = ({serverStatus}) => {
                 }
                 actions={
                     <>
-                        {
-                            !disabled &&
+                        {!disabled && <>
                             <Button size="sm" className="mr-2" type="danger" isLoading={isDeletingAllMods}
-                                    onClick={deleteAllMods}>Delete all Mods</Button> &&
+                                    onClick={deleteAllMods}>删除全部模组</Button>
                             <Button size="sm" className="mr-2" isLoading={isUpdatingAllMods}
-                                    onClick={updateAllMods}>Update all Mods</Button>
-                        }
+                                    onClick={updateAllMods}>更新全部模组</Button>
+                        </>}
                         <a className="bg-gray-light py-1 px-2 hover:glow-orange hover:bg-orange inline-block accentuated text-black font-bold"
-                           href={modsResource.downloadAllURL}>Download all Mods</a>
+                           href={modsResource.downloadAllURL}>下载全部模组</a>
                     </>
                 }
             />
 
             <Panel
-                title="Mod packs"
+                title="模组包"
                 className="mb-6"
                 content={
                     modPacks.map(

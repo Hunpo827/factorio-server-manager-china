@@ -16,15 +16,15 @@ const SelectVersionForm = ({releases, isOpen, close, install}) => {
     return (
         <Modal
             isOpen={isOpen}
-            title="Select Version"
+            title="选择版本"
             content={
                 <div className="h-64 overflow-y-auto">
                     <table className="w-full">
                         <thead>
                         <tr className="text-left py-1">
-                            <th>Version</th>
-                            <th>Compatibility</th>
-                            <th>Actions</th>
+                            <th>版本</th>
+                            <th>兼容性</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -45,7 +45,7 @@ const SelectVersionForm = ({releases, isOpen, close, install}) => {
                 </div>
             }
             actions={
-                <Button onClick={close} size="sm" type="danger">Cancel</Button>
+                <Button onClick={close} size="sm" type="danger">取消</Button>
             }
         />
     )

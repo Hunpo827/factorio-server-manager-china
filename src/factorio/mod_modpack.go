@@ -98,7 +98,7 @@ func (modPackMap *ModPackMap) CreateModPack(modPackName string) error {
 
 	if modPackMap.CheckModPackExists(modPackName) == true {
 		log.Printf("ModPack %s already existis", modPackName)
-		return errors.New("ModPack " + modPackName + " already exists, please choose a different name")
+		return errors.New("模组包 " + modPackName + " 已存在，请换一个名称")
 	}
 
 	sourceFileInfo, err := os.Stat(config.FactorioModsDir)
@@ -167,7 +167,7 @@ func (modPackMap *ModPackMap) CreateEmptyModPack(packName string) error {
 
 	if modPackMap.CheckModPackExists(packName) == true {
 		log.Printf("ModPack %s already existis", packName)
-		return errors.New("ModPack " + packName + " already exists, please choose a different name")
+		return errors.New("模组包 " + packName + " 已存在，请换一个名称")
 	}
 
 	// Create the modPack-folder

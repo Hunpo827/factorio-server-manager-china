@@ -160,7 +160,7 @@ func (modInfoList *ModInfoList) deleteMod(modName string) error {
 	}
 
 	log.Printf("the mod-file for mod %s doesn't exist!", modName)
-	return errors.New("the mod-file for mod " + modName + " doesn't exist!")
+	return errors.New("模组 " + modName + " 的文件不存在！")
 }
 
 func (modInfo *ModInfo) getModInfo(reader *zip.Reader) error {
@@ -195,7 +195,7 @@ func (modInfo *ModInfo) getModInfo(reader *zip.Reader) error {
 		}
 	}
 
-	return errors.New("info.json not found in zip-file")
+	return errors.New("压缩包中找不到 info.json")
 }
 
 func (modInfoList *ModInfoList) createMod(modName string, fileName string, modFile io.Reader) error {

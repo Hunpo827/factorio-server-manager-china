@@ -63,8 +63,8 @@ const ModPack = ({modPack, reloadModPacks, factorioVersion, reloadMods, disabled
                                              icon={isLoading ? faSpinner : faUpload}
                             />
                             <ConfirmDialog
-                                title="Load ModPack"
-                                content={`Loading the ModPack ${modPack.name} will remove all installed Mods.`}
+                                title="载入模组包"
+                                content={`载入模组包 ${modPack.name} 会先删除当前已安装的全部模组。`}
                                 isOpen={isLoadModPackDialogOpen}
                                 close={() => setIsLoadModPackDialogOpen(false)}
                                 onSuccess={() => loadModPack(modPack.name)}

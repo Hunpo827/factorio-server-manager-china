@@ -231,7 +231,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		username, ok := session.Values["username"]
 		if !ok {
-			http.Error(w, "Could not read username from sessioncookie", http.StatusUnauthorized)
+			http.Error(w, "无法从会话 Cookie 中读取用户名", http.StatusUnauthorized)
 			return
 		}
 

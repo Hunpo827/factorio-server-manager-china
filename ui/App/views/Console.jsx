@@ -25,7 +25,7 @@ const Console = ({serverStatus}) => {
 
     return (
         <Panel
-            title="Console"
+            title="控制台"
             content={
                 serverStatus.running
                     ? <>
@@ -44,7 +44,7 @@ const Console = ({serverStatus}) => {
                         />
                     </>
                     : <p className="text-red-light pt-4">
-                        The console is not available, because Factorio is not running.
+                        Factorio 未运行，控制台不可用。
                     </p>
             }
         />
