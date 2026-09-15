@@ -275,8 +275,8 @@ go test ./factorio/        # 单元测试（存档解析、DLC 开关、设置�
 * **Mitch Roote** - [roote.ca](https://roote.ca)
 * **[knoxfighter](https://github.com/knoxfighter)**
 * **[Jannaahs](https://github.com/jannaahs)**
-- **[All Contributions](https://github.com/OpenFactorioServerManager/factorio-server-manager/graphs/contributors)**
-- **mickael9** 逆向分析了 Factorio 存档格式：<https://forums.factorio.com/viewtopic.php?f=5&t=8568#>
+* **[All Contributions](https://github.com/OpenFactorioServerManager/factorio-server-manager/graphs/contributors)**
+* **mickael9** 逆向分析了 Factorio 存档格式：<https://forums.factorio.com/viewtopic.php?f=5&t=8568#>
 
 ## 许可证
 
