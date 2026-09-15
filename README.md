@@ -264,25 +264,22 @@ go test ./factorio/        # 单元测试（存档解析、DLC 开关、设置�
 
 ## 维护者
 
-* **[Hunpo827](https://github.com/Hunpo827)** —— 本汉化版（中文界面 + Factorio 2.0 适配）的维护者
+* **[Hunpo827](https://github.com/Hunpo827)**
 
 ## 鸣谢
 
 ### 上游项目作者
 
-本项目基于上游开源项目，原作者与主要贡献者如下（**版权归他们所有**）：
+本项目基于上游开源项目，原作者与主要贡献者如下：
 
 * **Mitch Roote** - [roote.ca](https://roote.ca)
 * **[knoxfighter](https://github.com/knoxfighter)**
 * **[Jannaahs](https://github.com/jannaahs)**
-
-### 其他
-
 - **[All Contributions](https://github.com/OpenFactorioServerManager/factorio-server-manager/graphs/contributors)**
 - **mickael9** 逆向分析了 Factorio 存档格式：<https://forums.factorio.com/viewtopic.php?f=5&t=8568#>
 
 ## 许可证
 
 本项目采用 MIT 许可证，详见 [LICENSE.md](LICENSE.md)。
-依据许可证要求，原始的版权声明保留在 `LICENSE.md` 中，**版权归上游原作者所有**；
+依据许可证要求，原始的版权声明保留在 `LICENSE.md` 中；
 本分支仅在其之上进行了汉化与功能改动。
