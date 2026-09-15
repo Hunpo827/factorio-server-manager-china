@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   并不会出现在普通的模组列表里，因此以前无法在管理器中开关。
 - 自动补齐新版游戏新增的服务器设置项：加载 `server-settings.json` 时，会把当前游戏版本
   （如 2.0）默认文件中存在、而配置文件里缺失的选项自动补上，并在界面中以“（新增）”标记。
+- 中文文档：重写 `README.md` 与 `docker/README.md`，补充安装部署、配置项说明、
+  命令行参数与环境变量、首次使用步骤与常见问题
 
 ### Changed
 - Configuration environment variables are now uppercase and prefixed with FSM

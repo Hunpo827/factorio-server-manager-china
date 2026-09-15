@@ -17,6 +17,7 @@ build/factorio-server-manager-%.zip: clean app/bundle factorio-server-manager-%
 	@echo "Packaging Build - $@"
 	@cp -r app/ factorio-server-manager/
 	@cp conf.json.example factorio-server-manager/conf.json
+	@cp README.md factorio-server-manager/
 	@zip -r $@ factorio-server-manager > /dev/null
 	@rm -r factorio-server-manager/
 
